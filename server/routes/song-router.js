@@ -22,12 +22,29 @@ router.get('/', (req, res) =>{
 
 router.post('/', (req, res) =>{
     console.log('In song-router post');
-    res.sendStatus(200);
+    const newSong = `INSERT INTO songs (id, artist, track, published, rank)
+    VALUES (1, ‘Billy Joel’, ‘We didn’’t start the fire’, ‘1/1/1989’, 35)
+    `
+    res.sendStatus(201);
+
 });
 
-router.put('/', (req, res) =>{
+router.put('/:id', (req, res) =>{
     console.log('In song-router put');
-    res.sendStatus(200);
+    const id = req.params.id;
+    const rank = req.body.rank;
+    const artist = req.body.artist;
+    const track = req.body.track;
+    const published = req.body.published;
+    const queryText = `UPDATE songs SET rank=$2, artist=$3, track=$4, published=$5  WHERE id=$1`;
+    pool.query(queryText, [id, rank, artist, track, published])
+    .then((result)=>{
+        console.log('successful update of song:', result);
+        res.sendStatus(200);
+    }).catch((error)=>{
+        console.log('error updating song:', error);
+        res.sendStatus(500);
+    });
 });
 
 router.delete('/:id', (req, res) =>{
@@ -46,9 +63,7 @@ router.delete('/:id', (req, res) =>{
     }).catch((error)=>{
         console.log('error deleting song:', error);
         res.sendStatus(500)
-    })
-    
-    res.sendStatus(200);
+    })    
 });
 
 module.exports = router;
