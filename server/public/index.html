@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Song Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./vendors/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="./styles/style.css" />
+    <script src="./vendors/angular.min.js"></script>
+    <script src="./clients/client.js"></script>
+    <script src="./clients/song-controller.js"></script>
+    <script src="./clients/song.service.js"></script>
+</head>
+<body>
+    <div ng-app="songApp">
+        <div ng-controller="SongController as SC">
+            <h1>Test</h1>
+            <input type="text" placeholder="rank" ng-model="SC.rankIn">
+            <input type="text" placeholder="artist" ng-model="SC.artistIn">
+            <input type="text" placeholder="track" ng-model="SC.trackIn">
+            <input type="date" placeholder="published" ng-model="SC.publishedIn">
+            <br>
+            <button ng-click="SC.postSong(SC.rankIn, SC.artistIn, SC.trackIn, SC.publishedIn)">Add Song</button>
+            <button ng-click="SC.updateSong(SC.rankIn, SC.artistIn, SC.trackIn, SC.publishedIn)">Update Song</button>
+            <button ng-click="SC.deleteSong(SC.rankIn, SC.artistIn, SC.trackIn, SC.publishedIn)">Delete Song</button>
+            <button ng-click="SC.upvoteSong(SC.rankIn, SC.artistIn, SC.trackIn, SC.publishedIn)">Upvote Song</button>
+            <br>
+            <br>
+            <button ng-click="SC.displaySong()">Display All Songs</button>
+
+            <div id="displayOutput">
+                <table class="table table-bordered">
+                    <thead>
+                        <td>Rank</td>
+                        <td>Artist</td>
+                        <td>Track</td>
+                        <td>Published</td>
+                    </thead>
+                    <tr ng-repeat="song in SC.songsGot">
+                        <td>{{song.rank}}</td>
+                        <td>{{song.artist}}</td>
+                        <td>{{song.track}}</td>
+                        <td>{{song.published}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

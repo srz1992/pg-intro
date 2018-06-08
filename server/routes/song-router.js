@@ -11,7 +11,7 @@ router.get('/', (req, res) =>{
     const queryText = 'SELECT * FROM songs';
     pool.query(queryText)
     .then((result)=>{
-        console.log('got something back');
+        console.log('got something back:', result);
         res.send(result.rows)
         
     }).catch((error)=>{
@@ -22,11 +22,22 @@ router.get('/', (req, res) =>{
 
 router.post('/', (req, res) =>{
     console.log('In song-router post');
-    const newSong = `INSERT INTO songs (id, artist, track, published, rank)
-    VALUES (1, ‘Billy Joel’, ‘We didn’’t start the fire’, ‘1/1/1989’, 35)
+    const rank = req.body.rank;
+    const artist = req.body.artist;
+    const track = req.body.track;
+    const published = req.body.published;
+    const newSong = `INSERT INTO songs (artist, track, published, rank)
+    VALUES ($1, $2, $3, $4)
     `
-    res.sendStatus(201);
-
+    console.log('newsong is:',newSong);
+    
+    pool.query(newSong, [artist, track, published, rank]).then((result)=>{
+        console.log('back from the pool with:', newSong);
+        res.sendStatus(201);
+    }).catch((error)=>{
+        console.log('error making new song:', error);
+        
+    })
 });
 
 router.put('/:id', (req, res) =>{
